@@ -32,13 +32,13 @@ const en = {
   },
   loginScreen: {
     signIn: "Sign In",
-    enterDetails:
-      "Enter your details below to unlock top secret info. You'll never guess what we've got waiting. Or maybe you will; it's not rocket science here.",
+    enterDetails: "Enter your details below to find out why Hanne is homophobic",
     emailFieldLabel: "Email",
     passwordFieldLabel: "Password",
     emailFieldPlaceholder: "Enter your email address",
     passwordFieldPlaceholder: "Super secret password here",
-    tapToSignIn: "Tap to sign in!",
+    tapToSignIn: "Sign in",
+    createAccount: "Create account",
     hint: "Hint: you can use any email address and your favorite password :)",
   },
   demoNavigator: {

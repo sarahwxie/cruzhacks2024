@@ -1,10 +1,12 @@
 import { observer } from "mobx-react-lite"
 import React, { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
-import { TextInput, TextStyle, ViewStyle } from "react-native"
+import { ActivityIndicator, TextInput, TextStyle, ViewStyle } from "react-native"
 import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
+import { FIREBASE_AUTH } from "../../FirebaseConfig"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth"
 
 interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
 
@@ -15,6 +17,15 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [attemptsCount, setAttemptsCount] = useState(0)
+
+  // manually added loading screen
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  // add firebase auth
+  const auth = FIREBASE_AUTH
+
+  // SARAH: pull the exact values you need from the store
+  // I FUCKING LOVE MOBX
   const {
     authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError },
   } = useStores()
@@ -22,8 +33,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   useEffect(() => {
     // Here is where you could fetch credentials from keychain or storage
     // and pre-fill the form fields.
-    setAuthEmail("ignite@infinite.red")
-    setAuthPassword("ign1teIsAwes0m3")
+    setAuthEmail("sample@gmail.com")
+    setAuthPassword("hanneIsHomophobic")
 
     // Return a "cleanup" function that React will run when the component unmounts
     return () => {
@@ -34,20 +45,60 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
   const error = isSubmitted ? validationError : ""
 
-  function login() {
+  async function login() {
+    setIsLoading(true)
     setIsSubmitted(true)
     setAttemptsCount(attemptsCount + 1)
 
     if (validationError) return
 
     // Make a request to your server to get an authentication token.
-    // If successful, reset the fields and set the token.
-    setIsSubmitted(false)
-    setAuthPassword("")
-    setAuthEmail("")
+    try {
+      const response = await signInWithEmailAndPassword(auth, authEmail, authPassword)
+      console.log(JSON.stringify(response, undefined, 4))
 
-    // We'll mock this with a fake token.
-    setAuthToken(String(Date.now()))
+      // If successful, reset the fields
+      setIsSubmitted(false)
+      setAuthPassword("")
+      setAuthEmail("")
+
+      // and set the token
+      const token = await response.user.getIdToken()
+      setAuthToken(token)
+    } catch (e: any) {
+      console.log(e)
+      alert("Account creation failed: " + e.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function createAccount() {
+    setIsLoading(true)
+    setIsSubmitted(true)
+    setAttemptsCount(attemptsCount + 1)
+
+    if (validationError) return
+
+    // Make a request to your server to get an authentication token.
+    try {
+      const response = await createUserWithEmailAndPassword(auth, authEmail, authPassword)
+      console.log(JSON.stringify(response, undefined, 4))
+
+      // If successful, reset the fields
+      setIsSubmitted(false)
+      setAuthPassword("")
+      setAuthEmail("")
+
+      // and set the token
+      const token = await response.user.getIdToken()
+      setAuthToken(token)
+    } catch (e: any) {
+      console.log(e)
+      alert("Account creation failed: " + e.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
@@ -105,14 +156,27 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         onSubmitEditing={login}
         RightAccessory={PasswordRightAccessory}
       />
-
-      <Button
-        testID="login-button"
-        tx="loginScreen.tapToSignIn"
-        style={$tapButton}
-        preset="reversed"
-        onPress={login}
-      />
+      {/* SARAH: I tested copilot refactoring here and it works really well */}
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <Button
+            testID="login-button"
+            tx="loginScreen.createAccount"
+            style={$tapButton}
+            preset="reversed"
+            onPress={createAccount}
+          />
+          <Button
+            testID="create-account-button"
+            tx="loginScreen.tapToSignIn"
+            style={$tapButton}
+            preset="reversed"
+            onPress={login}
+          />
+        </>
+      )}
     </Screen>
   )
 })

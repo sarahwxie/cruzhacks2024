@@ -66,14 +66,17 @@ const AppStack = observer(function AppStack() {
       screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
       initialRouteName={isAuthenticated ? "Welcome" : "Login"}
     >
+      {/* SARAH: here are the different navs for whether or not you're logged in */}
       {isAuthenticated ? (
         <>
+          {/* SARAH: Logged in users have this code */}
           <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} />
 
           <Stack.Screen name="Demo" component={DemoNavigator} />
         </>
       ) : (
         <>
+          {/* SARAH: Log in / Create Account is here */}
           <Stack.Screen name="Login" component={Screens.LoginScreen} />
         </>
       )}
