@@ -1,8 +1,8 @@
-import React from "react";
-import { Text, View } from "react-native";
-import Icon from "./Icon";
-import { ProfileItemT } from "../types";
-import styles, { DARK_GRAY, WHITE } from "../assets/styles";
+import React from "react"
+import { Text, View } from "react-native"
+import IconTinder from "./IconTinder"
+import { ProfileItemT } from "../types"
+import styles, { DARK_GRAY, WHITE } from "../assets/styles"
 
 const ProfileItem = ({
   age,
@@ -17,7 +17,7 @@ const ProfileItem = ({
   <View style={styles.containerProfileItem}>
     <View style={styles.matchesProfileItem}>
       <Text style={styles.matchesTextProfileItem}>
-        <Icon name="heart" size={13} color={WHITE} /> {matches}% Match!
+        <IconTinder name="heart" size={13} color={WHITE} /> {matches}% Match!
       </Text>
     </View>
 
@@ -29,32 +29,32 @@ const ProfileItem = ({
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <Icon name="person" size={12} color={DARK_GRAY} />
+        <IconTinder name="person" size={12} color={DARK_GRAY} />
       </Text>
       <Text style={styles.infoContent}>{info1}</Text>
     </View>
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <Icon name="pizza" size={12} color={DARK_GRAY} />
+        <IconTinder name="pizza" size={12} color={DARK_GRAY} />
       </Text>
       <Text style={styles.infoContent}>{info2}</Text>
     </View>
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <Icon name="airplane" size={12} color={DARK_GRAY} />
+        <IconTinder name="airplane" size={12} color={DARK_GRAY} />
       </Text>
       <Text style={styles.infoContent}>{info3}</Text>
     </View>
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <Icon name="calendar" size={12} color={DARK_GRAY} />
+        <IconTinder name="calendar" size={12} color={DARK_GRAY} />
       </Text>
       <Text style={styles.infoContent}>{info4}</Text>
     </View>
   </View>
-);
+)
 
-export default ProfileItem;
+export default ProfileItem
