@@ -29,7 +29,7 @@ const ProfileItem = ({
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <IconTinder name="person" size={12} color={DARK_GRAY} />
+        <IconTinder name="person" size={12} color={WHITE} />
       </Text>
       <Text style={styles.infoContent}>{info1}</Text>
     </View>
